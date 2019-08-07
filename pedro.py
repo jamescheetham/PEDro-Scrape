@@ -110,6 +110,7 @@ while True:
 
 get_request = 'abstract_with_title=%s&therapy=%s&problem=%s&body_part=%s&subdiscipline=%s&topic=%s&method=%s&authors_association=%s&title=%s&source=%s&year_of_publication=%s&date_record_was_created=%s&nscore=%s&perpage=%s&lop=%s&find=Start+Search' % (
     abstract.replace(' ', '+'),
+    #tuple([x.get_selected() for x in select_fields]),
     select_fields[0].get_selected(),
     select_fields[1].get_selected(),
     select_fields[2].get_selected(),

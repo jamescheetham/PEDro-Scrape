@@ -108,23 +108,9 @@ while True:
 
 #https://search.pedro.org.au/advanced-search/results?abstract_with_title=&therapy=VL01376&problem=0&body_part=0&subdiscipline=0&topic=0&method=0&authors_association=&title=&source=&year_of_publication=&date_record_was_created=&nscore=&perpage=20&lop=and&find=&find=Start+Search
 
-get_request = 'abstract_with_title=%s&therapy=%s&problem=%s&body_part=%s&subdiscipline=%s&topic=%s&method=%s&authors_association=%s&title=%s&source=%s&year_of_publication=%s&date_record_was_created=%s&nscore=%s&perpage=%s&lop=%s&find=Start+Search' % (
-    abstract.replace(' ', '+'),
-    #tuple([x.get_selected() for x in select_fields]),
-    select_fields[0].get_selected(),
-    select_fields[1].get_selected(),
-    select_fields[2].get_selected(),
-    select_fields[3].get_selected(),
-    select_fields[4].get_selected(),
-    select_fields[5].get_selected(),
-    author,
-    title_only,
-    source,
-    published_since,
-    records_added_since,
-    minimum_score,
-    PER_PAGE,
-    search_join)
+params = [abstract.replace(' ', '+')] + [x.get_selected() for x in select_fields] + [author, title_only, source, published_since, records_added_since, minimum_score, PER_PAGE, search_join]
+
+get_request = 'abstract_with_title=%s&therapy=%s&problem=%s&body_part=%s&subdiscipline=%s&topic=%s&method=%s&authors_association=%s&title=%s&source=%s&year_of_publication=%s&date_record_was_created=%s&nscore=%s&perpage=%s&lop=%s&find=Start+Search' % tuple(params)
 
 url_request = Request('%s?%s' % (RESULTS_URL, get_request))
 url_request.add_header('Cookie', cookie_data)

@@ -118,8 +118,15 @@ url_request.add_header('Cookie', cookie_data)
 urllib_request = urllib.request.urlopen(url_request)
 cookie_data = urllib_request.getheader('Set-Cookie').split(';')[0]
 results_page = BeautifulSoup(urllib_request, 'lxml')
+
+with open("output1.html", "w") as f:
+    f.write(str(results_page))
+
 re_prog = re.compile('Found ([0-9]+) records?')
 re_result = re_prog.search(results_page.find("div", {'id' : 'search-content'}).text)
+if re_result is None:
+    print('The Search returned 0 results')
+    sys.exit(0)
 try:
     search_count = int(re_result.group(1))
 except ValueError:
@@ -146,9 +153,6 @@ for p in pagination:
 print('There are %d pages with %d results per page' % (page_count, PER_PAGE))
 
 id_list = []
-
-#with open("output1.html", "w") as f:
-    #f.write(str(results_page))
 
 id_search = results_page.find_all('td', {'id' : re.compile("art-[0-9]+")}, recusive=False)
 for i in id_search:

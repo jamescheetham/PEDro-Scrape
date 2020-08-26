@@ -72,7 +72,7 @@ AJAX_URL = 'https://search.pedro.org.au/ajax/add-record'
 SAVE_RESULTS_URL = 'https://search.pedro.org.au/save-results/results'
 SUMMARY_RESULTS_URL = 'https://search.pedro.org.au/search-results/selected-records'
 PER_PAGE = 50
-SAVE_FILE = 'results.ris'
+SAVE_FILE = 'results_%s.ris' % (datetime.now().strftime("%Y%m%d_%H%M%S"))
 
 
 urllib_request = urllib.request.urlopen(SEARCH_URL)
@@ -140,16 +140,19 @@ while True:
         sys.exit(0)
     print('Invalid Response')
 page_count = 0
-pagination = results_page.find("ul", {'class' : 'pagination'}).findChildren('li', recursive=False)
-for p in pagination:
-    if p.text == '«' or p.text == '»' or p.text == '...':
-        continue
-    try:
-        page_num = int(p.text)
-    except ValueError:
-        sys.exit("Unable to parse page number (%s) into integer" % p.text)
-    if page_num > page_count:
-        page_count = page_num
+try:
+  pagination = results_page.find("ul", {'class' : 'pagination'}).findChildren('li', recursive=False)
+  for p in pagination:
+      if p.text == '«' or p.text == '»' or p.text == '...':
+          continue
+      try:
+          page_num = int(p.text)
+      except ValueError:
+          sys.exit("Unable to parse page number (%s) into integer" % p.text)
+      if page_num > page_count:
+          page_count = page_num
+except AttributeError:
+  page_count = 1
 print('There are %d pages with %d results per page' % (page_count, PER_PAGE))
 
 id_list = []
